@@ -1,0 +1,49 @@
+version: "2"
+services:
+  web:
+    container_name: php-dev-web
+    build: ./docker/web
+    ports:
+      - 1002:3000
+    links:
+      - db
+      - memcached
+      - elasticsearch
+    volumes:
+      - ./:/code
+    working_dir: /code
+    command: php -S 0.0.0.0:3000
+    networks:
+     - php_dev_link
+
+  db:
+    container_name: php-dev-mysql
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      # If you want to set mysql user manually, remove these comments:
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: app
+      MYSQL_HOST: ""
+    mem_limit: 1000000000
+    ports:
+      - 3301:3306
+    networks:
+      - php_dev_link
+
+  elasticsearch:
+    container_name: php-dev-elasticsearch
+    image: elasticsearch:2.4
+    networks:
+      - php_dev_link
+
+  memcached:
+    container_name: php-dev-memcached
+    image: memcached:1.4
+    networks:
+      - php_dev_link
+
+networks:
+  php_dev_link:
+    external: true

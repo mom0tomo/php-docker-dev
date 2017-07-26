@@ -1,0 +1,6 @@
+CREATE TABLE users (
+	id bigint(20) unsigned NOT_NULL_AUTO_INCREMENT COMMENT 'id',
+	username text COMMENT 'ユーザー名',
+	email text COMMENT 'メール',
+	password
+)
